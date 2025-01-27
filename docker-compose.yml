@@ -1,0 +1,34 @@
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres-sui-indexer
+    environment:
+      POSTGRES_USER: admin           
+      POSTGRES_PASSWORD: password    
+      POSTGRES_DB: sui_indexer
+    ports:
+      - "5432:5432"
+    networks:
+      - sui-local-network
+
+  local-sui-platform:
+    build: 
+      dockerfile: Dockerfile
+      # TODO: Pass args in for configurable local username and password
+      # args:
+      #   INDEXER_DB_URL: "postgres-sui-indexer"
+    container_name: local-sui-platform
+    depends_on:
+      - postgres
+    ports:
+      - "9000:9000"
+    networks:
+      - sui-local-network
+    # command: 
+
+    # TODO: Local SUI Client to instigate transactions, minikube/ docker swarm for multiple clients for testing?
+    
+networks:
+  sui-local-network:
+    driver: bridge
