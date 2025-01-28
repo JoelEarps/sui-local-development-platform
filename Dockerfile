@@ -26,10 +26,20 @@ RUN rm sui-package.tgz
 
 ENV PATH="$PATH:/app" 
 
-# No GraphQL for local example data
-# CMD ["env", "RUST_LOG=off,sui_node=info", "sui", "start", "--with-faucet", "--force-regenesis"] 
+
 
 FROM setup AS fresh_start_with_indexer
 
 CMD ["env", "RUST_LOG=off,sui_node=info", "sui", "start", "--with-faucet", "--force-regenesis", "--with-indexer", "--with-graphql", "--pg-host" , "postgres-sui-indexer", "--pg-user", "admin", "--pg-password", "password", "--pg-db-name", "sui_indexer"] 
+
+FROM setup AS fresh_start_no_indexer
+
+# No GraphQL for local example data
+# CMD ["env", "RUST_LOG=off,sui_node=info", "sui", "start", "--with-faucet", "--force-regenesis"] 
+CMD ["env", "RUST_LOG=off,sui_node=info", "sui", "start", "--with-faucet", "--force-regenesis"]
+
+# sui client new-env --alias local --rpc http://127.0.0.1:9000
+# RUN sui client switch --env local
+# RUN sui client faucet
+
 

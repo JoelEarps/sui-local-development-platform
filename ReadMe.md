@@ -46,11 +46,11 @@ What is a full node?
 Client Health Check commands, Readiness - make sure local env
 `sui client active-env`
 
-Set up scripts for new setup
+Set up scripts for new setup - seeding data and post indexer connection steps
+The installation of test data is done using turbo repo, TS and test containers, we do not want to do that
 Get coins and check for coins
-Run a PostGresDB in a different container and get things started
 Set up a database migration script and data initialisation script for where you do not need fake data
-Gives you an idea of what data you need
+Run a PostGresDB in a different container and get things started ✅
 Indexer and RPC graphQL containers rather than contained all in one infrastructure?
 
 ```bash
@@ -81,3 +81,8 @@ Indexer and RPC graphQL containers rather than contained all in one infrastructu
           [default: postgrespw]
 
 ```
+
+We have got to the point now where we need to seed the data and start making a client
+
+They suggest TS but we are looking to work in rust
+

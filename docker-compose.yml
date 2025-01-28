@@ -15,6 +15,7 @@ services:
   local-sui-platform:
     build: 
       dockerfile: Dockerfile
+      target: fresh_start_with_indexer
       # TODO: Pass args in for configurable local username and password
       # args:
       #   INDEXER_DB_URL: "postgres-sui-indexer"
