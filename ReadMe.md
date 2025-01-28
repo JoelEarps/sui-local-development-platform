@@ -29,7 +29,9 @@ curl --location --request POST 'http://127.0.0.1:9000' \
 
 You should be able to receive `{"jsonrpc":"2.0","id":1,"result":"10018"}` to verify things are running.
 
-## First time set up
+TODO: Turn this into a health check
+
+## First time set up - automate
 
 Config file ["/root/.sui/sui_config/client.yaml"] doesn't exist, do you want to connect to a Sui Full node server [y/N]
 
@@ -85,4 +87,15 @@ Indexer and RPC graphQL containers rather than contained all in one infrastructu
 We have got to the point now where we need to seed the data and start making a client
 
 They suggest TS but we are looking to work in rust
+
+## Rust SUI Connector and the On chain Rust client
+
+There are two Rust components assocaited with this repo
+
+Why the off chain implementation alongside a connecting API:
+
+1. Bundling transactions on chain to reduce transaction latency
+2. Storage of funds on chain for role based security measures.
+
+Connecting API - safely call module functionality of smart contract
 
