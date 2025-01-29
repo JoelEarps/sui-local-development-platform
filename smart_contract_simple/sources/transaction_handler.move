@@ -1,3 +1,5 @@
 module smart_contract_simple::transaction_handler {
-    public(module)
+    public fun swap_tokens(){
+        sui::debug::print
+    }
 }
