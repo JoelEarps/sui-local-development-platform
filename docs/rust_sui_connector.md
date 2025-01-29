@@ -20,3 +20,8 @@ How is data validated
 
 Data to be collected and
 
+
+## Intgration Tests
+
+Set up Wire Mock for docker image integration tests
+Can we use the benchmark feature of rust to look at the processing and E2E times of calling the

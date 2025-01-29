@@ -1,5 +1,5 @@
 use std::io::Error;
-
+mod errors;
 use market_data_collector::request_handler::fetch_market_data_at_required_rate;
 use sui_models;
 use tokio::task::JoinSet;
