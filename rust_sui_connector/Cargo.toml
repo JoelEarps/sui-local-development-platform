@@ -4,3 +4,12 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+sui-models = { package="sui-models", git="ssh://git@github.com/defiborg/connector-commons.git", branch="TDX-1023" }
+reqwest = { version = "0.12", features = ["json"] }
+tokio = { version="1.43.0" ,features = ["full"] }
+mockall = "0.13.1"
+mockall_double = "0.3.1"
+anyhow = "1.0.95"
+
+[dev-dependencies]
+mockall = "0.13.1"
