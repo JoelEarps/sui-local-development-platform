@@ -1,9 +1,10 @@
-use sui_sdk::{types::base_types::SuiAddress, SuiClientBuilder};
+use sui_sdk::{rpc_types::EventFilter, types::base_types::SuiAddress, SuiClientBuilder};
 use std::str::FromStr;
 
 mod events;
 use events::event_handler::say_hello;
 
+// Create multi thread application 
 #[tokio::main]
 async fn main() -> Result<(), anyhow::Error> {
     println!("Hello, world!");
@@ -29,6 +30,17 @@ async fn main() -> Result<(), anyhow::Error> {
     .get_all_balances(address)
     .await?;
     println!("The balances for all coins owned by address: {address} are {:?}", total_balance);
+
+    // This is done via websockets, therefore should we cast this straight to the connector?
+    // file:///Users/joelearps/Documents/OMS/SUI/initial_test/rust_client_sui/target/doc/sui_json_rpc_types/enum.EventFilter.html for filtering options
+    let mut subscribe_all = sui_client
+        .event_api()
+        .subscribe_event(EventFilter::All([]))
+        .await?;
+
+    loop {
+        println!()
+    }
 
     say_hello();
     Ok(())
