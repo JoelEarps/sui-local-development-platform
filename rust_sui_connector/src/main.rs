@@ -1,21 +1,28 @@
-use std::io::Error;
 mod errors;
-use market_data_collector::request_handler::fetch_market_data_at_required_rate;
-use sui_models;
-use tokio::task::JoinSet;
 mod market_data_collector;
-use anyhow::Result;
+mod config_handler;
+
+use market_data_collector::request_handler::fetch_market_data_at_required_rate;
+use config_handler::{ApplicationConfiguration, load_arguments};
+use std::io::Error;
+use sui_models;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    // TODO: Fetch this from either env for config to enable testing
-    let base_url_from_config = String::from("https://deepbook-indexer.mainnet.mystenlabs.com/");
-    let fetching_rate = 1;
+    // Fetch Application Configuration
+    let application_arguments = load_arguments();
+    let application_configuration = ApplicationConfiguration::new(application_arguments)?;
+
+    // Periodically Fetch Data at the rate described the config
     let fetching_data_task = tokio::spawn(
-        fetch_market_data_at_required_rate(base_url_from_config, fetching_rate)
+        fetch_market_data_at_required_rate(application_configuration.base_url, application_configuration.api_call_rate)
     );
+
+    // TODO: Perform Data Processing on incoming data.
     let test = sui_models::add(12, 13);
     println!("{test}");
+
+    // Handle Multi threading
     let application_result = tokio::try_join!(fetching_data_task);
     match application_result {
         Ok(_) => Ok(()),

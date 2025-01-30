@@ -20,8 +20,32 @@ How is data validated
 
 Data to be collected and
 
+## Testing
+
+What has been unit tested
+Coverage at the time of writing
 
 ## Intgration Tests
 
 Set up Wire Mock for docker image integration tests
 Can we use the benchmark feature of rust to look at the processing and E2E times of calling the
+
+What is the purpose of the integration testing 
+How were unit tests implemented?
+
+## Decisions
+
+### Use of YAML Cconfig file over alternatives
+
+Why a config file?
+
+12 factor app https://12factor.net/config.
+
+Alternatives
+
+Reason for choice
+No live updates needed
+Better for versioning.
+No sensitive information.
+
+12 factor apps, best practices and managing config
