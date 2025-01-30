@@ -1,4 +1,4 @@
 {
-    "base_url": "https://deepbook-indexer.mainnet.mystenlabs.com/summary",
+    "base_url": "https://deepbook-indexer.mainnet.mystenlabs.com/orderbook/",
     "fetch_rate": 1
 }

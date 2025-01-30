@@ -4,7 +4,9 @@ use std::io::Error;
 use std::io::ErrorKind;
 use anyhow::anyhow;
 use anyhow::Result;
+use serde::Deserialize;
 use crate::errors::data_fetching_errors::DataFetchingErrors;
+use connector_model::orderbook::OrderBook;
 
 // TODO: Look at Mocking once initial functionality is complete
 // use mockall::predicate::*;
@@ -39,13 +41,20 @@ use crate::errors::data_fetching_errors::DataFetchingErrors;
 //     }
 // }
 
+#[derive(Deserialize, Debug)]
+pub struct DeepBookOrderBookData {
+    timestamp: String,
+    bids: Vec<Vec<String>>,
+    asks: Vec<Vec<String>>
+}
+
 pub(crate) async fn fetch_market_data_at_required_rate(base_url_from_config: String, rate: u64) -> Result<(), DataFetchingErrors> {
     println!("Fetching market data from DeepBook Indexer at a rate of {rate} seconds");
     let mut attempt_counter = 0;
     loop {
         println!("Attempt number {attempt_counter}");
         // Pop this on a mutex to see if it has been changed? Clever way of checking if this has changed?
-        let test = make_request(base_url_from_config.clone()).await;
+        let test = make_request(base_url_from_config.clone(), "SUI_USDC", 4).await;
         match test {
             Ok(_) => println!("{test:#?}"),
             Err(_) => attempt_counter+=1
@@ -58,12 +67,14 @@ pub(crate) async fn fetch_market_data_at_required_rate(base_url_from_config: Str
     }
 }
 
-pub(super) async fn make_request(base_url: String) -> Result<String, DataFetchingErrors> {
-    println!("Making request to {base_url}");
-    let resp = reqwest::get(base_url)
+pub(super) async fn make_request(base_url: String, market_id: &str, depth: u8) -> Result<DeepBookOrderBookData, DataFetchingErrors> {
+    let url_with_params = format!("{}{}?level={}&depth={}",base_url, market_id, 2, depth);
+    println!("Making request to {url_with_params}");
+    let resp = reqwest::get(url_with_params)
         .await?
-        .text()
+        .json::<DeepBookOrderBookData>()
         .await?;
+    println!("{:?}", resp);
     Ok(resp)
 }
 

@@ -5,6 +5,8 @@ edition = "2021"
 
 [dependencies]
 sui-models = { package="sui-models", git="ssh://git@github.com/defiborg/connector-commons.git", branch="TDX-1023" }
+connector-model = { package = "connector-model", git = "ssh://git@github.com/defiborg/connector-commons.git" }
+
 reqwest = { version = "0.12", features = ["json"] }
 tokio = { version="1.43.0" ,features = ["full"] }
 mockall = "0.13.1"
@@ -13,6 +15,7 @@ anyhow = "1.0.95"
 thiserror = "2.0.11"
 config = "0.15.6"
 clap = { version = "4.5.27", features = ["derive"] }
+serde = "1.0.217"
 
 [dev-dependencies]
 mockall = "0.13.1"
