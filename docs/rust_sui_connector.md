@@ -49,3 +49,21 @@ Better for versioning.
 No sensitive information.
 
 12 factor apps, best practices and managing config
+
+### Error Scenario Splitting
+
+Choose to split application and product decision errors into different files.
+
+e.g. Data Fetching, Config Loading - two different product domains where decisions are made
+
+### Data Pulling Rates
+
+1 second
+
+2-4 checkpoints per second
+
+### What Market Pairs
+
+Limitations of the deepbook
+
+Fork current source code

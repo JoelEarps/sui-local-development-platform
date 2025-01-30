@@ -1,4 +1,4 @@
 {
-    "base_url": "https://deepbook-indexer.mainnet.mystenlabs.com/get_pools",
+    "base_url": "https://deepbook-indexer.mainnet.mystenlabs.com/summary",
     "fetch_rate": 1
 }
