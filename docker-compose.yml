@@ -22,13 +22,22 @@ services:
     container_name: local-sui-platform
     depends_on:
       - postgres
+      - deepbook-indexer-mock
     ports:
       - "9000:9000"
     networks:
       - sui-local-network
-    # command: 
 
-    # TODO: Local SUI Client to instigate transactions, minikube/ docker swarm for multiple clients for testing?
+  deepbook-indexer-mock:
+    image: wiremock/wiremock:3.10.0
+    container_name: deepbook-indexer
+    volumes:
+      - ./environments/$ENVIRONMENT/wiremock-config:/home/wiremock
+    ports:
+      - 8080:8080
+    networks:
+      - sui-local-network
+    
     
 networks:
   sui-local-network:
