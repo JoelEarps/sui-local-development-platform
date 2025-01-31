@@ -1,0 +1,30 @@
+{
+    "request": {
+      "method": "GET",
+      "urlPathPattern": "/orderbook/(DEEP_SUI|DEEP_USDC|SUI_USDC|BETH_USDC|WUSDC_USDC|NS_SUI|NS_USDC|WUSDT_USDC|TYPUS_SUI|AUSD_USDC|SUI_AUSD|DRF_SUI)",
+      "queryParameters": {
+        "level": {
+          "equalTo": "2"
+        },
+        "depth": {
+          "equalTo": "4"
+        }
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": "{ \"message\": \"Valid market pair\" }",
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    },
+    "postServeActions": {
+      "parameters": {
+        "allowedMarketPairs": [
+          "DEEP_SUI", "DEEP_USDC", "SUI_USDC", "BETH_USDC",
+          "WUSDC_USDC", "NS_SUI", "NS_USDC", "WUSDT_USDC",
+          "TYPUS_SUI", "AUSD_USDC", "SUI_AUSD", "DRF_SUI"
+        ]
+      }
+    }
+  }
