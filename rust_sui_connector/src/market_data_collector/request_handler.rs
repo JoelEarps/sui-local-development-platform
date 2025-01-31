@@ -1,74 +1,6 @@
-use std::collections::HashMap;
-use std::io::stderr;
-use std::io::Error;
-use std::io::ErrorKind;
-use anyhow::anyhow;
 use anyhow::Result;
-use connector_model::orderbook::PriceLevel;
-use connector_model::pricing::Quantity;
-use connector_model::pricing::Rate;
-use serde::Deserialize;
-use crate::errors::data_fetching_errors::DataFetchingErrors;
+use crate::{errors::data_fetching_errors::DataFetchingErrors, market_data_collector::deepbook_orderbook::DeepBookV3OrderBookData};
 use connector_model::orderbook::OrderBook;
-use std::str::FromStr;
-use bigdecimal::BigDecimal;
-
-#[derive(Deserialize, Debug)]
-pub struct DeepBookV3OrderBookData {
-    timestamp: String,
-    bids: Vec<DeepBookV3PriceLevel>,
-    asks: Vec<DeepBookV3PriceLevel>
-}
-
-#[derive(Deserialize, Debug)]
-#[serde(try_from = "Vec<String>")]
-struct DeepBookV3PriceLevel {
-    price: BigDecimal,
-    quantity: BigDecimal
-}
-
-impl TryFrom<Vec<String>> for DeepBookV3PriceLevel {
-    type Error = DataFetchingErrors;
-    fn try_from(value: Vec<String>) -> std::result::Result<Self, Self::Error> {
-        if value.len() == 2 {
-            Ok(DeepBookV3PriceLevel {
-                price: BigDecimal::from_str(&value[0])?,
-                quantity: BigDecimal::from_str(&value[1])?
-            })
-        } else {
-            Err(DataFetchingErrors::DeepBookV3DeserialisationError())
-        } 
-    }
-}
-
-impl From<DeepBookV3PriceLevel> for PriceLevel {
-    fn from(value: DeepBookV3PriceLevel) -> Self {
-        PriceLevel {
-            price: Rate::new(value.price),
-            quantity: Quantity::new(value.quantity)
-        }
-    }
-}
-
-impl From<DeepBookV3OrderBookData> for OrderBook {
-    fn from(value: DeepBookV3OrderBookData) -> Self {
-
-        let ask_price_levels = value.asks
-        .into_iter()
-        .map(| data | PriceLevel::from(data))
-        .collect();
-
-        let bid_price_levels= value.bids.into_iter().
-        map(|data| PriceLevel::from(data))
-        .collect();
-
-        OrderBook::new(bid_price_levels, ask_price_levels)
-    }
-}
-
-// Convert from DeepBook -> Generic OrderBook
-// Make this a struct that implements the trait MarketBuilder
-// Get head round difference between Market and current function
 
 // OrderBook -> Vector of bids and ask of type PriceLevel, PriceLevel has two members, price and amount of type Rate and Quantity respectively.
 // Therefore we need a way of converting to Price Levels to construct new OrderBook data.
@@ -105,15 +37,9 @@ pub(super) async fn make_request(base_url: String, market_id: &str, depth: u8) -
     Ok(resp)
 }
 
-/// Error Scenarios:
-/// Successful Fetch
-/// API error and retry limit exceeded
 #[cfg(test)]
 mod tests {
     use super::*;
-    // TODO: Provide mock implementation for request making, thus allowing for quicker and less expensive tests
-    // Mockall has been used before
-    // https://medium.com/@md.abir1203/rust-testing-frameworks-931ae101b3c7
     #[tokio::test]
     async fn testing_making_request(){
         let response = fetch_market_data_at_required_rate("https://deepbook-indexer.mainnet.mystenlabs.com/get_pools".to_string(), 1).await;
