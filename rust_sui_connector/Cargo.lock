@@ -2362,6 +2362,7 @@ name = "rust_sui_connector"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "bigdecimal",
  "clap",
  "config",
  "connector-model",
