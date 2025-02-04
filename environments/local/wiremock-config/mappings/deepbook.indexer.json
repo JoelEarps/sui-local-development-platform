@@ -13,18 +13,11 @@
     },
     "response": {
       "status": 200,
-      "body": "{ \"message\": \"Valid market pair\" }",
+      "body": "{ \"timestamp\": \"{{now format='epoch'}}\",  \"bids\": [[ \"{{randomDecimal lower=0 upper=20}}\", \"{{randomDecimal lower=0 upper=1000}}\" ]], \"asks\": [[ \"{{randomDecimal lower=0 upper=20}}\", \"{{randomDecimal lower=0 upper=1000}}\" ]]}",
       "headers": {
         "Content-Type": "application/json"
-      }
-    },
-    "postServeActions": {
-      "parameters": {
-        "allowedMarketPairs": [
-          "DEEP_SUI", "DEEP_USDC", "SUI_USDC", "BETH_USDC",
-          "WUSDC_USDC", "NS_SUI", "NS_USDC", "WUSDT_USDC",
-          "TYPUS_SUI", "AUSD_USDC", "SUI_AUSD", "DRF_SUI"
-        ]
-      }
+      },
+      "transformers": ["response-template"]
     }
-  }
+}
+  

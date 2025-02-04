@@ -29,7 +29,7 @@ services:
       - sui-local-network
 
   deepbook-indexer-mock:
-    image: wiremock/wiremock:3.10.0
+    image: wiremock/wiremock:3.11.0-1
     container_name: deepbook-indexer
     volumes:
       - ./environments/$ENVIRONMENT/wiremock-config:/home/wiremock
@@ -37,8 +37,8 @@ services:
       - 8080:8080
     networks:
       - sui-local-network
-    
-    
+    command: [ "--global-response-templating" ]
+        
 networks:
   sui-local-network:
     driver: bridge

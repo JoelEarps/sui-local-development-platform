@@ -1,5 +1,11 @@
 # SUI Docker Local Test Env
 
+## Prerequisites
+
+1. Mermaid
+2. Rust
+3. Docker
+
 _Note_: This is currently a playground - just trying to get it working for now!
 
 Purpose is to run SUI and make an application for it, with the purpose of creating a test environment
@@ -99,3 +105,10 @@ Why the off chain implementation alongside a connecting API:
 
 Connecting API - safely call module functionality of smart contract
 
+### Indexer Mock
+
+TODOS:
+1. Fix Depth and Level Implementations using Response Templating
+    Length - 0 or > 1 - will give you a number of bid and asks e.g. 100 = 50 bids and asks
+    Depth - , either 1 or 2. 1 - only best bid, 2 arranged by best bids and asks (default)
+    https://docs.sui.io/standards/deepbookv3-indexer#:~:text=level%3A%20The%20level,the%20order%20book
