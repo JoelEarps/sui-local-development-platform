@@ -53,7 +53,6 @@ What is a full node?
 
 Client Health Check commands, Readiness - make sure local env
 `sui client active-env`
-
 Set up scripts for new setup - seeding data and post indexer connection steps
 The installation of test data is done using turbo repo, TS and test containers, we do not want to do that
 Get coins and check for coins
@@ -112,3 +111,7 @@ TODOS:
     Length - 0 or > 1 - will give you a number of bid and asks e.g. 100 = 50 bids and asks
     Depth - , either 1 or 2. 1 - only best bid, 2 arranged by best bids and asks (default)
     https://docs.sui.io/standards/deepbookv3-indexer#:~:text=level%3A%20The%20level,the%20order%20book
+
+## Infrastructure
+
+1. using lock files

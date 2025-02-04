@@ -38,7 +38,34 @@ services:
     networks:
       - sui-local-network
     command: [ "--global-response-templating" ]
-        
+
+  deepbook-connector:
+    build: 
+      dockerfile: Swissborg_Rust.Dockerfile
+      args:
+        - APP_NAME=rust_sui_connector
+        - ENVIRONMENT=local
+        - BIN_NAME=rust_sui_connector
+      ssh:
+        - default
+    command: tail -f /dev/null
+
+  test-slim:
+    build: 
+      dockerfile: Buster-Debian_Slim_Rust.Dockerfile
+      ssh:
+        - default
+      args:
+        - PLATFORM=linux/amd64
+  
+  test-alpine:
+    build: 
+      dockerfile: Alpine_Lightweight_Rust_Dockerfile
+      ssh:
+        - default
+      args:
+        - PLATFORM=linux/amd64
+              
 networks:
   sui-local-network:
     driver: bridge
