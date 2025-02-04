@@ -1,11 +1,15 @@
 mod errors;
 mod market_data_collector;
 mod config_handler;
+mod market_client_handler;
 
-use market_data_collector::request_handler::fetch_market_data_at_required_rate;
+use std::{collections::HashMap, sync::Arc};
 use config_handler::{ApplicationConfiguration, load_arguments};
-use std::io::Error;
-use sui_models;
+use market_client_handler::SUIConnectors;
+use market_data_collector::deepbook_connector::DeepBookConnector;
+
+
+
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -13,20 +17,17 @@ async fn main() -> anyhow::Result<()> {
     let application_arguments = load_arguments();
     let application_configuration = ApplicationConfiguration::new(application_arguments)?;
 
-    // Periodically Fetch Data at the rate described the config
-    let fetching_data_task = tokio::spawn(
-        fetch_market_data_at_required_rate(application_configuration.base_url, application_configuration.api_call_rate)
-    );
+    // TODO: How are we handling other pairs
+    // Pass in PubKey, what is pubkey used for here?
+    // What functionality do we need, what should be tested?
+    // Error scenarios?
+    let initial_connector = Arc::new(DeepBookConnector::new(application_configuration.base_url, 2, 4, "SUI_USDC".to_string()));
+    let mut market_connectors = SUIConnectors {
+        sui_market_clients: HashMap::new()
+    };
 
-    // TODO: Perform Data Processing on incoming data.
-    let test = sui_models::add(12, 13);
-    println!("{test}");
+    market_connectors.sui_market_clients.insert("test_client", initial_connector);
 
-    // Handle Multi threading
-    let application_result = tokio::try_join!(fetching_data_task);
-    match application_result {
-        Ok(_) => Ok(()),
-        // TODO: Make custom errors for failing to fetch, process and operate
-        Err(_) => Err(anyhow::Error::new(Error::new(std::io::ErrorKind::Other, "Custom Errors to be made")))
-    }
+
+    Ok(())
 }

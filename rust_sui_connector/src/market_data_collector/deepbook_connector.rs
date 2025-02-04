@@ -11,7 +11,7 @@ use crate::market_data_collector::deepbook_orderbook::DeepBookV3OrderBookData;
 /// async fn fetch_orderbook is tested here rust_sui_connector/tests
 /// It held no value to unit test this implementation currently as it would require providing a mock implementation
 /// Once the scanner is implemented this may change however I imagine there will be a mock connector 
-struct DeepBookConnector {
+pub(crate) struct DeepBookConnector {
     orderbook_url: String,
     depth: usize,
     length: usize,
