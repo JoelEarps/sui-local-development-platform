@@ -1,0 +1,52 @@
+# TODO: currently this builds a very lightweight local image, we may want to corss compile for various platforms
+# Current Target is x86_64-unknown-linux-musl, but this could be easily specified, you may also want to version various constraints e.g. Rust version, protobuf version
+# Lets try and get Hello World working first?
+FROM rust:1.84.0-alpine AS build
+ARG APP_NAME
+ARG SSH_AUTH_SOCK
+
+WORKDIR /workspace
+
+COPY ./${APP_NAME} .
+
+# RUN apt-get update -y; \
+#     apt-get install -y protobuf-compiler libssl-dev musl-tools; \
+#     rm -rf /var/lib/apt/lists/*
+
+RUN apk add openssl-dev musl-dev build-base curl unzip protobuf protobuf-dev
+
+# RUN PB_REL="https://github.com/protocolbuffers/protobuf/releases"; \
+#     curl -LO $PB_REL/download/v25.1/protoc-25.1-linux-x86_64.zip; \
+#     unzip protoc-25.1-linux-x86_64.zip -d $HOME/.local; \
+#     export PATH="$PATH:$HOME/.local/bin"
+
+# RUN rustup target add x86_64-unknown-linux-musl
+RUN --mount=type=ssh cargo build --release 
+# --target=x86_64-unknown-linux-musl
+
+# FROM alpine:latest AS run
+
+# ARG APP_NAME
+# ARG ENVIRONMENT
+
+# # ARG UID=10001
+# # RUN adduser \
+# #     --disabled-password \
+# #     --gecos "" \
+# #     --home "/nonexistent" \
+# #     --shell "/sbin/nologin" \
+# #     --no-create-home \
+# #     --uid "${UID}" \
+# #     appuser
+
+# # USER appuser
+
+# WORKDIR /app
+
+# COPY --from=build /workspace/target/debug/${APP_NAME} /app/${APP_NAME}
+
+# COPY ./environments/${ENVIRONMENT}/${APP_NAME}.json ./environments/${ENVIRONMENT}/${APP_NAME}.json
+
+# CMD [ "/app/${APP_NAME}" ]
+
+FROM scratch as prod
