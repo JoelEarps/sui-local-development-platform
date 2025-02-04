@@ -52,21 +52,22 @@
 # FROM scratch as prod
 
 ARG PLATFORM
-ARG TARGET_APP
 
 FROM --platform=${PLATFORM} rust:1.84.0-alpine AS build
+ARG TARGET_APP
 
 RUN apk update && apk add openssl-dev
 
 WORKDIR /app
 
-COPY ./hello_world_compile_test .
+COPY ./${TARGET_APP} .
 
 RUN rustup target add x86_64-unknown-linux-musl
 RUN cargo build --target x86_64-unknown-linux-musl --release
 
+RUN mv ./target/x86_64-unknown-linux-musl/release/${TARGET_APP} /app/rust_application
+
 FROM --platform=${PLATFORM} scratch AS prod
+COPY --from=build /app/rust_application /opt/rust_application
 
-COPY --from=build /app/target/x86_64-unknown-linux-musl/release/hello_world_compile_test /opt/hello_world_compile_test/
-
-CMD ["/opt/hello_world_compile_test/hello_world_compile_test"]
+CMD ["/opt/rust_application"]
