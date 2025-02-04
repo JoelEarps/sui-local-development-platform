@@ -52,6 +52,7 @@
 # FROM scratch as prod
 
 ARG PLATFORM
+ARG TARGET_APP
 
 FROM --platform=${PLATFORM} rust:1.84.0-alpine AS build
 
@@ -61,10 +62,11 @@ WORKDIR /app
 
 COPY ./hello_world_compile_test .
 
-RUN cargo build --release
+RUN rustup target add x86_64-unknown-linux-musl
+RUN cargo build --target x86_64-unknown-linux-musl --release
 
-FROM --platform=${PLATFORM} rust:1.84.0-alpine AS prod
+FROM --platform=${PLATFORM} scratch AS prod
 
-COPY --from=build /app/target/release/hello_world_compile_test /opt/hello_world_compile_test/
+COPY --from=build /app/target/x86_64-unknown-linux-musl/release/hello_world_compile_test /opt/hello_world_compile_test/
 
 CMD ["/opt/hello_world_compile_test/hello_world_compile_test"]
