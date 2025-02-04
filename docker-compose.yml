@@ -65,6 +65,7 @@ services:
         - default
       args:
         - PLATFORM=linux/amd64
+        - TARGET_APP=hello_world_compile_test
               
 networks:
   sui-local-network:
